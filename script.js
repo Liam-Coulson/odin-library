@@ -18,7 +18,15 @@ function addBookToLibrary() {
 }
 
 function displayLibrary(library) {
-
+  myLibrary.forEach(book => {
+    let newRow = document.createElement("tr");
+    Object.values(book).forEach(field => {
+      let newEntry = document.createElement("td");
+      newEntry.textContent = field;
+      newRow.appendChild(newEntry);
+    })
+    libraryTable.appendChild(newRow);
+  })
 }
 
 myLibrary.push(new Book("The Hobbit", "JRR Tolkein", "1937", "310", "Fantasy", "no"));
@@ -34,3 +42,5 @@ Object.keys(myLibrary[0]).forEach(field => {
   tableNode.textContent = field;
   headerRow.appendChild(tableNode);
 })
+
+displayLibrary(myLibrary);
