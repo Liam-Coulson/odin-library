@@ -1,6 +1,8 @@
-const myLibrary = [];
-const libraryTable = document.getElementById("library-table");
+const libraryWrapper = document.getElementById("library-wrapper");
 const headerRow = document.getElementById("header-row");
+
+const myLibrary = [];
+const BookList = {};
 
 class Book {
   constructor(title, author, year, pages, genre, read) {
@@ -13,34 +15,47 @@ class Book {
   }
 }
 
-function addBookToLibrary() {
-
+function addBookToLibrary(bookObj, library=myLibrary) {
+  let bookID = Object.keys(BookList).length +1;
+  BookList[bookID] = bookObj;
+  library.push(bookID); // The bookID in library points to the book object in BookList
 }
 
 function displayLibrary(library) {
-  myLibrary.forEach(book => {
-    let newRow = document.createElement("tr");
-    Object.values(book).forEach(field => {
-      let newEntry = document.createElement("td");
-      newEntry.textContent = field;
-      newRow.appendChild(newEntry);
-    })
-    libraryTable.appendChild(newRow);
+  // Gets the list of current displayed books so we don't double display
+  let currentDisplayedLibrary = document.querySelectorAll(".book");
+  let libraryIDList = [];
+  currentDisplayedLibrary.forEach(book => {
+    libraryIDList.push(book.id);
+  })
+
+  console.log(currentDisplayedLibrary);
+
+  myLibrary.forEach(bookID => {
+    if (libraryIDList.includes("b"+bookID)) {}
+    else {
+      console.log(`the ID should be valid now, id is ${bookID}`);
+      let newBookNode = document.createElement("div");
+      newBookNode.id = "b"+bookID; // CSS IDs cannot start with a num
+      newBookNode.classList.add("book");
+      newBookNode.textContent = `Title: ${BookList[bookID].title}\n
+      Author: ${BookList[bookID].author}\n
+      Year published: ${BookList[bookID].year}\n
+      Pages: ${BookList[bookID].pages}\n
+      Genre: ${BookList[bookID].genre}\n
+      Have I read it: ${BookList[bookID].read}
+      `;
+      libraryWrapper.appendChild(newBookNode);
+    }
   })
 }
 
-myLibrary.push(new Book("The Hobbit", "JRR Tolkein", "1937", "310", "Fantasy", "no"));
-myLibrary.push(new Book("The Hunger Games", "Suzanne Collins", "2008", "374", "Young Adult Fiction", "yes"));
-myLibrary.push(new Book("Dune", "Frank Herbert", "1965", "755", "Science Fiction", "yes"));
-myLibrary.push(new Book("A Christmas Carol", "Charles Dickens", "1843", "65", "Victorian Literature", "no"));
+addBookToLibrary(new Book("The Hobbit", "JRR Tolkein", "1937", "310", "Fantasy", "no"));
+addBookToLibrary(new Book("The Hunger Games", "Suzanne Collins", "2008", "374", "Young Adult Fiction", "yes"));
+addBookToLibrary(new Book("Dune", "Frank Herbert", "1965", "755", "Science Fiction", "yes"));
+addBookToLibrary(new Book("A Christmas Carol", "Charles Dickens", "1843", "65", "Victorian Literature", "no"));
 
-// Adds the headers to the table based on the keys in the constructor
+console.log(BookList);
 
-Object.keys(myLibrary[0]).forEach(field => {
-  let tableNode = document.createElement("th");
-  field = field.charAt(0).toUpperCase() + field.slice(1)
-  tableNode.textContent = field;
-  headerRow.appendChild(tableNode);
-})
-
+displayLibrary(myLibrary);
 displayLibrary(myLibrary);
