@@ -362,4 +362,12 @@ template {
 
 #library-wrapper {
   display: flex;
+  gap: 20px;
+}
+
+.book {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  grid-template-rows: 1fr;
+  border: solid black 2px;
 }
