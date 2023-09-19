@@ -36,6 +36,11 @@ function displayLibrary(library) {
       let newBookNode = document.createElement("div");
       newBookNode.id = "b"+bookID; // CSS IDs cannot start with a num
       newBookNode.classList.add("book");
+
+      const bookSpine = document.createElement("div");
+      bookSpine.classList.add("spine");
+      newBookNode.appendChild(bookSpine);
+
       Object.keys(BookList[bookID]).forEach(field => {
         const fieldNode = document.createElement("div");
         fieldNode.textContent = field;

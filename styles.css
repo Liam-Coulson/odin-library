@@ -352,12 +352,23 @@ template {
 /*========================== MY CSS ========================== */
 /*============================================================ */
 
+* {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.header {
+  height: 100px;
+  width: 100%;
+  background-color: #06b6d4;
+}
+
 .container {
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  background-color: #ecfeff;
 }
 
 #library-wrapper {
@@ -367,7 +378,29 @@ template {
 
 .book {
   display: grid;
-  grid-template-columns: 100px 1fr;
-  grid-template-rows: 1fr;
+  width: 250px;
+  grid-template-columns: 15px 100px 1fr;
+  grid-template-rows: repeat(6, 1fr);
   border: solid black 2px;
+}
+
+.book > * {
+  border: dotted blue 1px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding: 5px;
+  /* background-color: #78350f;
+  background-color: #7a5743; */
+}
+
+.book > .spine {
+  background-color: #ab3335;
+  grid-area: 1 / 1 / -1 / 2;
+}
+
+.footer {
+  height: 100px;
+  width: 100%;
+  background-color: #06b6d4;
 }
