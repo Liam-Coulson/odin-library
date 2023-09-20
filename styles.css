@@ -371,15 +371,14 @@ template {
   background-color: #ecfeff;
 }
 
-.title {
-  font-weight: bold;
-  font-size: 48px;
-}
-
 #library-wrapper {
   display: flex;
   align-items: center;
   gap: 20px;
+}
+
+#library-wrapper .selected {
+  border: #06b6d4 solid 8px;
 }
 
 .book {
@@ -412,8 +411,8 @@ template {
   grid-area: 1 / 1 / -1 / 2;
 }
 
-#library-wrapper .selected {
-  border: #06b6d4 solid 8px;
+.book > .editable {
+  background-color: white;
 }
 
 .buttons-container {
