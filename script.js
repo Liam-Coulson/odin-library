@@ -1,29 +1,51 @@
 const libraryWrapper = document.getElementById("library-wrapper");
 const headerRow = document.getElementById("header-row");
+const addButton = document.getElementById("add");
+const editButton = document.getElementById("edit");
+const deleteButton = document.getElementById("delete");
 
 const myLibrary = [];
 const BookList = {};
 
 // EVENTS
 libraryWrapper.addEventListener("click", clickHandler);
+addButton.addEventListener("click", clickHandler);
+editButton.addEventListener("click", clickHandler);
+deleteButton.addEventListener("click", clickHandler);
+
 
 function clickHandler(e) {
-  console.log(e.target);
   if (e.target.parentNode.matches(".book")) {
-    console.log("Matches a book");
     if (e.target.parentNode.matches(".selected")){
-      console.log("targeting an already selected book");
-      console.log("e.target: ",e.target);
-      console.log("e.target.parentnode: ",e.target.parentNode);
-      console.log("parent class list: ",e.target.parentNode.classList);
       e.target.parentNode.classList.remove("selected")
-      console.log("e.target.parentnode class list: ", e.target.parentNode.classList);
     } else {
-      console.log("targeting a non-selected book");
       e.target.parentNode.parentNode.childNodes.forEach(book => {
         book.classList.remove("selected");
       })
       e.target.parentNode.classList.add("selected");
+    }
+  } else if (e.target.matches("#add")) {
+    console.log("Adding new book...");
+  } else if (e.target.matches("#edit")) {
+    console.log("Editing this book...");
+  } else if (e.target.matches("#delete")) {
+    if (libraryWrapper.querySelector(".selected") == null) {
+      console.log("You haven't selected a book yet.")
+    } else {
+      let selectedBook = libraryWrapper.querySelector(".selected");
+      let bookID = selectedBook.id.slice(1); // Remove the leading "b"
+      console.log(`Deleting this book: ${BookList[bookID].title}`);
+      console.log(`My library looks like this: ${myLibrary}`);
+      console.log(`My library index 1 has type ${typeof myLibrary[1]}`);
+      console.log(`BookID from javascript has type ${typeof bookID}`);
+      console.log(`Index of ${bookID} is ${myLibrary.indexOf(bookID)}`);
+      myLibrary.splice(myLibrary.indexOf(bookID),1); // Delete from JS array
+      console.log("My JS library after deleting from JS: ",myLibrary)
+      selectedBook.remove(); // Delete from DOM
+      console.log("The book has been deleted!");
+      myLibrary.forEach(bookID => {
+        console.log(BookList[bookID]);
+      })
     }
   }
 }
@@ -40,7 +62,7 @@ class Book {
 }
 
 function addBookToLibrary(bookObj, library=myLibrary) {
-  let bookID = Object.keys(BookList).length +1;
+  let bookID = (Object.keys(BookList).length +1).toString();
   BookList[bookID] = bookObj;
   library.push(bookID); // The bookID in library points to the book object in BookList
 }
