@@ -4,6 +4,30 @@ const headerRow = document.getElementById("header-row");
 const myLibrary = [];
 const BookList = {};
 
+// EVENTS
+libraryWrapper.addEventListener("click", clickHandler);
+
+function clickHandler(e) {
+  console.log(e.target);
+  if (e.target.parentNode.matches(".book")) {
+    console.log("Matches a book");
+    if (e.target.parentNode.matches(".selected")){
+      console.log("targeting an already selected book");
+      console.log("e.target: ",e.target);
+      console.log("e.target.parentnode: ",e.target.parentNode);
+      console.log("parent class list: ",e.target.parentNode.classList);
+      e.target.parentNode.classList.remove("selected")
+      console.log("e.target.parentnode class list: ", e.target.parentNode.classList);
+    } else {
+      console.log("targeting a non-selected book");
+      e.target.parentNode.parentNode.childNodes.forEach(book => {
+        book.classList.remove("selected");
+      })
+      e.target.parentNode.classList.add("selected");
+    }
+  }
+}
+
 class Book {
   constructor(title, author, year, pages, genre, read) {
     this.title = title;
@@ -43,19 +67,13 @@ function displayLibrary(library) {
 
       Object.keys(BookList[bookID]).forEach(field => {
         const fieldNode = document.createElement("div");
-        fieldNode.textContent = field;
+        // Capitalise the first letter
+        fieldNode.textContent = field.charAt(0).toUpperCase()+field.slice(1);
         const valueNode = document.createElement("div");
         valueNode.textContent = BookList[bookID][field];
         newBookNode.appendChild(fieldNode);
         newBookNode.appendChild(valueNode);
       })
-      // newBookNode.textContent = `Title: ${BookList[bookID].title}\n
-      // Author: ${BookList[bookID].author}\n
-      // Year published: ${BookList[bookID].year}\n
-      // Pages: ${BookList[bookID].pages}\n
-      // Genre: ${BookList[bookID].genre}\n
-      // Have I read it: ${BookList[bookID].read}
-      // `;
       libraryWrapper.appendChild(newBookNode);
     }
   })

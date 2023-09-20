@@ -371,17 +371,30 @@ template {
   background-color: #ecfeff;
 }
 
+.title {
+  font-weight: bold;
+  font-size: 48px;
+}
+
 #library-wrapper {
   display: flex;
+  align-items: center;
   gap: 20px;
 }
 
 .book {
   display: grid;
   width: 250px;
+  height: 300px;
   grid-template-columns: 15px 100px 1fr;
   grid-template-rows: repeat(6, 1fr);
   border: solid black 2px;
+}
+
+.book:hover {
+  border: solid red 4px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 .book > * {
@@ -397,6 +410,27 @@ template {
 .book > .spine {
   background-color: #ab3335;
   grid-area: 1 / 1 / -1 / 2;
+}
+
+#library-wrapper .selected {
+  border: #06b6d4 solid 8px;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.buttons-container > button {
+  border-radius: 8px;
+  width: 80px;
+  padding: 20px;
+}
+
+.instructions {
+  width: clamp(300px, 20%, 500px);
+  border: solid black 2px;
 }
 
 .footer {
