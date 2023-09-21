@@ -120,35 +120,18 @@ function displayLibrary(library) {
     displayLibraryIDList.push(book.id);
   })
 
-  // Updates the displayed library in the website
+  // Updates the displayed library on the website
   myLibrary.forEach(bookID => {
     if (displayLibraryIDList.includes("b"+bookID)) {}
     else {
-      let newBookNode = document.createElement("div");
-      newBookNode.id = "b"+bookID; // CSS IDs cannot start with a num
-      newBookNode.classList.add("book");
-
-      const bookSpine = document.createElement("div");
-      bookSpine.classList.add("spine");
-      newBookNode.appendChild(bookSpine);
-
-      Object.keys(BookList[bookID]).forEach(field => {
-        const fieldNode = document.createElement("div");
-        fieldNode.classList.add(field);
-        // Capitalise the first letter
-        fieldNode.textContent = field.charAt(0).toUpperCase()+field.slice(1);
-        const valueNode = document.createElement("div");
-        valueNode.classList.add("value");
-        valueNode.textContent = BookList[bookID][field];
-        newBookNode.appendChild(fieldNode);
-        newBookNode.appendChild(valueNode);
-      })
-      libraryWrapper.appendChild(newBookNode);
+      const bookToAdd = createNewBookElm(bookID);
+      libraryWrapper.appendChild(bookToAdd);
     }
   })
 }
 
-// Reverses all of the changes we made when making the book
+// Reverses all of the changes we made to the HTML
+// when making the book editable
 function finishEditing(editingBook) {
   libraryWrapper.addEventListener("click", clickHandler);
   editingBook.classList.remove("editing");
@@ -158,35 +141,16 @@ function finishEditing(editingBook) {
   editingBook.childNodes.forEach(gridElm => {
     if (gridElm.classList.contains("value")) {
       gridElm.contentEditable = false;
-
-      // Credit for this function from stackoverflow https://stackoverflow.com/a/3806004
-      // This allows the user to tab between fields and auto-select all text in the fields
-      gridElm.onfocus = function() {
-        window.setTimeout(function() {
-            var sel, range;
-            if (window.getSelection && document.createRange) {
-                range = document.createRange();
-                range.selectNodeContents(gridElm);
-                sel = window.getSelection();
-                sel.removeAllRanges();
-                sel.addRange(range);
-            } else if (document.body.createTextRange) {
-                range = document.body.createTextRange();
-                range.moveToElementText(gridElm);
-                range.select();
-            }
-        }, 1);
-      };
       gridElm.classList.remove("editable");
     }
   })
-  changeBookDetails(editingBook);
+  changeBookList(editingBook);
 }
 
 // Takes the changes in HTML and transfers these changes to JS
 // Without doing this, if we added an "update" button to update the
 // library on screen, our changes would not have been saved.
-function changeBookDetails(selectedBook) {
+function changeBookList(selectedBook) {
   let bookID = selectedBook.id.slice(1);
   Object.keys(BookList[bookID]).forEach(key => {
     BookList[bookID][key] = selectedBook.querySelector(`.${key}`).nextElementSibling.textContent;
@@ -196,10 +160,39 @@ function changeBookDetails(selectedBook) {
   displayLibrary(myLibrary);
 }
 
+function createNewBookElm(bookID=null) {
+  let newBookNode = document.createElement("div");
+  newBookNode.id = "b"+bookID; // CSS IDs cannot start with a num
+  newBookNode.classList.add("book");
+
+  const bookSpine = document.createElement("div");
+  bookSpine.classList.add("spine");
+  newBookNode.appendChild(bookSpine);
+
+  Object.keys(Book).forEach(field => {
+    const fieldNode = document.createElement("div");
+    fieldNode.classList.add(field);
+    // Capitalise the first letter
+    fieldNode.textContent = field.charAt(0).toUpperCase()+field.slice(1);
+    const valueNode = document.createElement("div");
+    valueNode.classList.add("value");
+    
+    // If book info is present, auto-fill the book element with it
+    if (bookID != null) {
+      valueNode.textContent = BookList[bookID][field];
+    } // else leave it blank
+    newBookNode.appendChild(fieldNode);
+    newBookNode.appendChild(valueNode);
+  })
+  return newBookNode;
+}
+
+
 addBookToLibrary(new Book("The Hobbit", "JRR Tolkein", "1937", "310", "Fantasy", "no"));
 addBookToLibrary(new Book("The Hunger Games", "Suzanne Collins", "2008", "374", "Young Adult Fiction", "yes"));
 addBookToLibrary(new Book("Dune", "Frank Herbert", "1965", "755", "Science Fiction", "yes"));
 addBookToLibrary(new Book("A Christmas Carol", "Charles Dickens", "1843", "65", "Victorian Literature", "no"));
 
-
 displayLibrary(myLibrary);
+
+console.log(Object.keys(BookList));
